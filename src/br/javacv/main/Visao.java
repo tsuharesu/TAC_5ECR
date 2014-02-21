@@ -1,12 +1,13 @@
 package br.javacv.main;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 
 public class Visao {
 
@@ -293,13 +294,42 @@ public class Visao {
         return matriz;
     }
 
-    // public fpbMedia
-      // fazer uma media de tudo, multiplicando pelo peso da matriz mascara
-      // nesse filtro nascem novos valores
+    // Faz uma média dos valores em volta - borrao ********************************************************
+    public int[][] fpbMedia(int[][] origem) {
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int[][] matriz = new int[largura][altura];
+        for (int linha = 1; linha < altura - 1; linha++) {
+            for (int coluna = 1; coluna < largura - 1; coluna++) {
+                int valor = (
+                        + 1 * origem[coluna - 1][linha - 1] + 1 * origem[coluna][linha - 1] + 1 * origem[coluna + 1][linha - 1]
+                        + 1 * origem[coluna - 1][linha]     + 1 * origem[coluna][linha]     + 1 * origem[coluna + 1][linha]
+                        + 1 * origem[coluna - 1][linha + 1] + 1 * origem[coluna][linha + 1] + 1 * origem[coluna + 1][linha + 1]
+                            ) / 9;
+                matriz[coluna][linha] = limite0To255(valor);
+            }
+        }
+        return matriz;
+    }
 
-    // public fpbMediana
-      // ordena a matriz e pega o valor do meio
-      // nesse filtro nao nascem novos valores
+    // Pega a mediana dos valores em volta - borra menos ********************************************************
+    public int[][] fpbMediana(int[][] origem) {
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int[][] matriz = new int[largura][altura];
+        for (int linha = 1; linha < altura - 1; linha++) {
+            for (int coluna = 1; coluna < largura - 1; coluna++) {
+                int valor[] = {
+                        + 1 * origem[coluna - 1][linha - 1], + 1 * origem[coluna][linha - 1], + 1 * origem[coluna + 1][linha - 1],
+                        + 1 * origem[coluna - 1][linha],     + 1 * origem[coluna][linha]    , + 1 * origem[coluna + 1][linha],
+                        + 1 * origem[coluna - 1][linha + 1], + 1 * origem[coluna][linha + 1], + 1 * origem[coluna + 1][linha + 1]
+                };
+                Arrays.sort(valor);
+                matriz[coluna][linha] = limite0To255(valor[4]);
+            }
+        }
+        return matriz;
+    }
 
     public int limite0To255(int valor){
         if (valor < 0) {

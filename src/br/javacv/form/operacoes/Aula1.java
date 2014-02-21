@@ -14,8 +14,17 @@ public class Aula1 implements IExecutaOperacao {
 	public List<BufferedImage> perform(int[][][] imagemMatrizOriginal) {
 		List<BufferedImage> images = new ArrayList<BufferedImage>();
 
+//        images.add(  visao.matrizToImagemRGB( imagemMatrizOriginal )  );
 
-                images.add(  visao.matrizToImagemRGB( imagemMatrizOriginal )  );
+        int[][] cinza = visao.tonsCinzaIntensidade(imagemMatrizOriginal);
+
+        images.add(visao.matrizToImagem(cinza));
+
+        int[][] fpbMedia = visao.fpbMedia(cinza);
+        images.add(visao.matrizToImagem(fpbMedia));
+
+        int[][] fpbMediana = visao.fpbMediana(cinza);
+        images.add(visao.matrizToImagem(fpbMediana));
 
 
 

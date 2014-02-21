@@ -2,3 +2,11 @@ Repositório criado para as aulas de Tópicos Avançados de Computação, 5ECR -
 
 IntelliJ - só importar o projeto
 Eclipse - criar um novo projeto apontado location para pasta do projeto
+
+20130219 -
+Filtro Passa Baixa pela Media você deve pegar todos os valores e fazer a média dos valores. Importante:
+- dividir pelo peso total da matriz-máscara
+- começar pela linha 1 e coluna 1, senão vai dar ruim (indice inexistente, etc). Depende do tamanho da matriz-máscara
+(uma 5x5 começaria pela linha 2, coluna 2 ...)
+
+Filtro Passa Baixa pela Mediana você deve pegar todos os valores, ordenar e pegar o valor do meio.
