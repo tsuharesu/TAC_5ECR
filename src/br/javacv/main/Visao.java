@@ -295,7 +295,7 @@ public class Visao {
     }
 
     // Faz uma média dos valores em volta - borrao ********************************************************
-    public int[][] fpbMedia(int[][] origem) {
+    public int[][] fpbMedia3x3(int[][] origem) {
         int largura = origem.length;
         int altura = origem[0].length;
         int[][] matriz = new int[largura][altura];
@@ -306,14 +306,14 @@ public class Visao {
                         + 1 * origem[coluna - 1][linha]     + 1 * origem[coluna][linha]     + 1 * origem[coluna + 1][linha]
                         + 1 * origem[coluna - 1][linha + 1] + 1 * origem[coluna][linha + 1] + 1 * origem[coluna + 1][linha + 1]
                             ) / 9;
-                matriz[coluna][linha] = limite0To255(valor);
+                matriz[coluna][linha] = valor;
             }
         }
         return matriz;
     }
 
     // Pega a mediana dos valores em volta - borra menos ********************************************************
-    public int[][] fpbMediana(int[][] origem) {
+    public int[][] fpbMediana3x3(int[][] origem) {
         int largura = origem.length;
         int altura = origem[0].length;
         int[][] matriz = new int[largura][altura];
@@ -325,7 +325,7 @@ public class Visao {
                         + 1 * origem[coluna - 1][linha + 1], + 1 * origem[coluna][linha + 1], + 1 * origem[coluna + 1][linha + 1]
                 };
                 Arrays.sort(valor);
-                matriz[coluna][linha] = limite0To255(valor[4]);
+                matriz[coluna][linha] = valor[4];
             }
         }
         return matriz;
