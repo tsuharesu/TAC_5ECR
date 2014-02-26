@@ -331,6 +331,102 @@ public class Visao {
         return matriz;
     }
 
+    public int[][] fpbMinimo3x3(int[][] origem) {
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int[][] matriz = new int[largura][altura];
+        for (int linha = 1; linha < altura - 1; linha++) {
+            for (int coluna = 1; coluna < largura - 1; coluna++) {
+                int valor[] = {
+                        + 1 * origem[coluna - 1][linha - 1], + 1 * origem[coluna][linha - 1], + 1 * origem[coluna + 1][linha - 1],
+                        + 1 * origem[coluna - 1][linha],     + 1 * origem[coluna][linha]    , + 1 * origem[coluna + 1][linha],
+                        + 1 * origem[coluna - 1][linha + 1], + 1 * origem[coluna][linha + 1], + 1 * origem[coluna + 1][linha + 1]
+                };
+                Arrays.sort(valor);
+                matriz[coluna][linha] = valor[0];
+            }
+        }
+        return matriz;
+    }
+
+    public int[][] fpbMaximo3x3(int[][] origem) {
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int[][] matriz = new int[largura][altura];
+        for (int linha = 1; linha < altura - 1; linha++) {
+            for (int coluna = 1; coluna < largura - 1; coluna++) {
+                int valor[] = {
+                        + 1 * origem[coluna - 1][linha - 1], + 1 * origem[coluna][linha - 1], + 1 * origem[coluna + 1][linha - 1],
+                        + 1 * origem[coluna - 1][linha],     + 1 * origem[coluna][linha]    , + 1 * origem[coluna + 1][linha],
+                        + 1 * origem[coluna - 1][linha + 1], + 1 * origem[coluna][linha + 1], + 1 * origem[coluna + 1][linha + 1]
+                };
+                Arrays.sort(valor);
+                matriz[coluna][linha] = valor[8];
+            }
+        }
+        return matriz;
+    }
+
+    // Filtros Passa Alta - detecta contornos
+
+    public int[][] fpaHorizontal(int[][] origem) {
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int[][] matriz = new int[largura][altura];
+        for (int linha = 1; linha < altura - 1; linha++) {
+            for (int coluna = 1; coluna < largura - 1; coluna++) {
+                int valor = (
+                        - 1 * origem[coluna - 1][linha - 1] - 2 * origem[coluna][linha - 1] - 1 * origem[coluna + 1][linha - 1]
+                        + 0 * origem[coluna - 1][linha]     + 0 * origem[coluna][linha]     + 0 * origem[coluna + 1][linha]
+                        + 1 * origem[coluna - 1][linha + 1] + 2 * origem[coluna][linha + 1] + 1 * origem[coluna + 1][linha + 1]
+                );
+                matriz[coluna][linha] = limite0To255(Math.abs(valor));
+            }
+        }
+        return matriz;
+    }
+
+    public int[][] fpaVertical(int[][] origem) {
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int[][] matriz = new int[largura][altura];
+        for (int linha = 1; linha < altura - 1; linha++) {
+            for (int coluna = 1; coluna < largura - 1; coluna++) {
+                int valor = (
+                        - 1 * origem[coluna - 1][linha - 1] + 0 * origem[coluna][linha - 1] + 1 * origem[coluna + 1][linha - 1]
+                        - 2 * origem[coluna - 1][linha]     + 0 * origem[coluna][linha]     + 2 * origem[coluna + 1][linha]
+                        - 1 * origem[coluna - 1][linha + 1] + 0 * origem[coluna][linha + 1] + 1 * origem[coluna + 1][linha + 1]
+                );
+                matriz[coluna][linha] = limite0To255(Math.abs(valor));
+            }
+        }
+        return matriz;
+    }
+
+    public int[][] fpaSobel(int[][] origem) {
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int[][] matriz = new int[largura][altura];
+        for (int linha = 1; linha < altura - 1; linha++) {
+            for (int coluna = 1; coluna < largura - 1; coluna++) {
+                int valorVertical = (
+                        - 1 * origem[coluna - 1][linha - 1] + 0 * origem[coluna][linha - 1] + 1 * origem[coluna + 1][linha - 1]
+                        - 2 * origem[coluna - 1][linha]     + 0 * origem[coluna][linha]     + 2 * origem[coluna + 1][linha]
+                        - 1 * origem[coluna - 1][linha + 1] + 0 * origem[coluna][linha + 1] + 1 * origem[coluna + 1][linha + 1]
+                );
+
+                int valorHorizontal = (
+                        - 1 * origem[coluna - 1][linha - 1] - 2 * origem[coluna][linha - 1] - 1 * origem[coluna + 1][linha - 1]
+                        + 0 * origem[coluna - 1][linha]     + 0 * origem[coluna][linha]     + 0 * origem[coluna + 1][linha]
+                        + 1 * origem[coluna - 1][linha + 1] + 2 * origem[coluna][linha + 1] + 1 * origem[coluna + 1][linha + 1]
+                );
+                matriz[coluna][linha] = limite0To255((int) Math.sqrt(Math.pow(valorVertical, 2) + Math.pow(valorHorizontal, 2)));
+            }
+        }
+        return matriz;
+    }
+
+
     public int limite0To255(int valor){
         if (valor < 0) {
             return 0;

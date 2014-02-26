@@ -20,11 +20,14 @@ public class Aula1 implements IExecutaOperacao {
 
         images.add(visao.matrizToImagem(cinza));
 
-        int[][] fpbMedia = visao.fpbMedia3x3(cinza);
-        images.add(visao.matrizToImagem(fpbMedia));
+        int[][] fpaHorizontal = visao.fpaHorizontal(cinza);
+        images.add(visao.matrizToImagem(fpaHorizontal));
 
-        int[][] fpbMediana = visao.fpbMediana3x3(cinza);
-        images.add(visao.matrizToImagem(fpbMediana));
+        int[][] fpaVertical = visao.fpaVertical(cinza);
+        images.add(visao.matrizToImagem(fpaVertical));
+
+        int[][] fpaSobel = visao.fpaSobel(cinza);
+        images.add(visao.matrizToImagem(fpaSobel));
 
 		return images;
     }
