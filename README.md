@@ -1,7 +1,31 @@
 Repositório criado para as aulas de Tópicos Avançados de Computação, 5ECR - FIAP
 
 *IntelliJ* - só importar o projeto
+
 *Eclipse* - criar um novo projeto apontado location para pasta do projeto
+
+## 20140311
+**1. Prewitt**
+
+É uma maneira diferente de fazer a mesma máscara que Sobel, mas sem dar tanta importância para o pixel central.
+
+**2. Histogramas**
+
+Faz a contagem do número de pixels que tem determinado valor de intensidade. Isso servirá para saber se uma imagem está mais escura ou mais clara.
+
+O histograma normalizado devolve o valor em porcentagem.
+
+O histograma equalizado pega o normalizado e faz um novo acumulado. Depois ele vai pegar essa distribuição de porcentagem de intensidades e criar um novo histograma,
+aumentando ou diminuindo os níveis de intensidade baseado em quanto a imagem antiga era escura ou clara.
+
+**3. Morfologia**
+
+Só funciona com imagens binarizadas.
+
+A dilatação serve para preencher espaços. Quando ela encontra um pixel branco, preenche todos os pixeis em volta com branco também.
+
+A erosão faz o contrário: se encontra um pixel preto, preenche todos os pixeis em volta com preto (remove).
+Já que é um processo inverso da dilatação, podemos fazer um negativo da dilatação, fazer a erosão e depois negativar novamente.
 
 ## 20140225
 **1. Filtro Passa Alta**
@@ -47,4 +71,5 @@ Pega todos os valores e faz a média ponderada em cima da máscara. Importante:
 
 **Mediana:**
 Pega todos os valores, ordenar do menor para o maior e pegar o valor do meio.
+
 - Em uma matriz 3x3, o valor do meio é o 4.

@@ -5,13 +5,22 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Visao {
 
-
+       
+	// Auxiliar ****************************************************************
+    public int limite0To255(int valor) {
+        if (valor < 0) {
+            valor = 0;
+        } else if (valor > 255) {
+            valor = 255;
+        }
+        return valor;
+    }
+       
     // Arquivo p/ Matriz *******************************************************
     public int[][][] arquivoMatrizRGB(String arquivo) {
         int[][][] matriz;
@@ -266,137 +275,148 @@ public class Visao {
         return matriz;
     }
 
-    // Negativa as cores ********************************************************
+    // Negativo ****************************************************************
     public int[][][] negativoRGB(int[][][] origem) {
         int largura = origem.length;
         int altura = origem[0].length;
         int[][][] matriz = new int[largura][altura][3];
         for (int linha = 0; linha < altura; linha++) {
             for (int coluna = 0; coluna < largura; coluna++) {
-                matriz[coluna][linha][0] = 255 - origem[coluna][linha][0];
-                matriz[coluna][linha][1] = 255 - origem[coluna][linha][1];
-                matriz[coluna][linha][2] = 255 - origem[coluna][linha][2];
+                int r = origem[coluna][linha][0];
+                int g = origem[coluna][linha][1];
+                int b = origem[coluna][linha][2];
+                matriz[coluna][linha][0] = 255 - r;
+                matriz[coluna][linha][1] = 255 - g;
+                matriz[coluna][linha][2] = 255 - b;
             }
         }
         return matriz;
     }
 
-    // Negativa em cinza ********************************************************
-    public int[][] negativoCinza(int[][] origem) {
+    public int[][] negativo(int[][] origem) {
         int largura = origem.length;
         int altura = origem[0].length;
         int[][] matriz = new int[largura][altura];
         for (int linha = 0; linha < altura; linha++) {
             for (int coluna = 0; coluna < largura; coluna++) {
-                matriz[coluna][linha] = 255 - origem[coluna][linha];
+                int valor = origem[coluna][linha];
+                matriz[coluna][linha] = 255 - valor;
             }
         }
         return matriz;
     }
 
-    // Faz uma média dos valores em volta - borrao ********************************************************
+       
+    // Filtro Passa-Baixa
     public int[][] fpbMedia3x3(int[][] origem) {
         int largura = origem.length;
         int altura = origem[0].length;
         int[][] matriz = new int[largura][altura];
         for (int linha = 1; linha < altura - 1; linha++) {
             for (int coluna = 1; coluna < largura - 1; coluna++) {
-                int valor = (
-                        + 1 * origem[coluna - 1][linha - 1] + 1 * origem[coluna][linha - 1] + 1 * origem[coluna + 1][linha - 1]
-                        + 1 * origem[coluna - 1][linha]     + 1 * origem[coluna][linha]     + 1 * origem[coluna + 1][linha]
-                        + 1 * origem[coluna - 1][linha + 1] + 1 * origem[coluna][linha + 1] + 1 * origem[coluna + 1][linha + 1]
-                            ) / 9;
+                int valor = (+ 1 * (origem[coluna - 1][linha - 1]) + 1 * (origem[coluna][linha - 1]) + 1 * (origem[coluna + 1][linha - 1])
+                             + 1 * (origem[coluna - 1][linha])     + 1 * (origem[coluna][linha])     + 1 * (origem[coluna + 1][linha])
+                             + 1 * (origem[coluna - 1][linha + 1]) + 1 * (origem[coluna][linha + 1]) + 1 * (origem[coluna + 1][linha + 1])) / 9;
                 matriz[coluna][linha] = valor;
             }
         }
         return matriz;
     }
 
-    // Pega a mediana dos valores em volta - borra menos ********************************************************
     public int[][] fpbMediana3x3(int[][] origem) {
         int largura = origem.length;
         int altura = origem[0].length;
         int[][] matriz = new int[largura][altura];
         for (int linha = 1; linha < altura - 1; linha++) {
             for (int coluna = 1; coluna < largura - 1; coluna++) {
-                int valor[] = {
-                        + 1 * origem[coluna - 1][linha - 1], + 1 * origem[coluna][linha - 1], + 1 * origem[coluna + 1][linha - 1],
-                        + 1 * origem[coluna - 1][linha],     + 1 * origem[coluna][linha]    , + 1 * origem[coluna + 1][linha],
-                        + 1 * origem[coluna - 1][linha + 1], + 1 * origem[coluna][linha + 1], + 1 * origem[coluna + 1][linha + 1]
-                };
-                Arrays.sort(valor);
-                matriz[coluna][linha] = valor[4];
+                int vetor[] = {
+                    origem[coluna - 1][linha - 1],
+                    origem[coluna][linha - 1],
+                    origem[coluna + 1][linha - 1],
+                    origem[coluna - 1][linha],
+                    origem[coluna][linha],
+                    origem[coluna + 1][linha],
+                    origem[coluna - 1][linha + 1],
+                    origem[coluna][linha + 1],
+                    origem[coluna + 1][linha + 1]};
+                java.util.Arrays.sort(vetor);
+                matriz[coluna][linha] = vetor[4];
             }
         }
         return matriz;
     }
-
+    
     public int[][] fpbMinimo3x3(int[][] origem) {
         int largura = origem.length;
         int altura = origem[0].length;
         int[][] matriz = new int[largura][altura];
         for (int linha = 1; linha < altura - 1; linha++) {
             for (int coluna = 1; coluna < largura - 1; coluna++) {
-                int valor[] = {
-                        + 1 * origem[coluna - 1][linha - 1], + 1 * origem[coluna][linha - 1], + 1 * origem[coluna + 1][linha - 1],
-                        + 1 * origem[coluna - 1][linha],     + 1 * origem[coluna][linha]    , + 1 * origem[coluna + 1][linha],
-                        + 1 * origem[coluna - 1][linha + 1], + 1 * origem[coluna][linha + 1], + 1 * origem[coluna + 1][linha + 1]
-                };
-                Arrays.sort(valor);
-                matriz[coluna][linha] = valor[0];
+                int vetor[] = {
+                    origem[coluna - 1][linha - 1],
+                    origem[coluna][linha - 1],
+                    origem[coluna + 1][linha - 1],
+                    origem[coluna - 1][linha],
+                    origem[coluna][linha],
+                    origem[coluna + 1][linha],
+                    origem[coluna - 1][linha + 1],
+                    origem[coluna][linha + 1],
+                    origem[coluna + 1][linha + 1]};
+                java.util.Arrays.sort(vetor);
+                matriz[coluna][linha] = vetor[0];
             }
         }
         return matriz;
     }
-
+    
     public int[][] fpbMaximo3x3(int[][] origem) {
         int largura = origem.length;
         int altura = origem[0].length;
         int[][] matriz = new int[largura][altura];
         for (int linha = 1; linha < altura - 1; linha++) {
             for (int coluna = 1; coluna < largura - 1; coluna++) {
-                int valor[] = {
-                        + 1 * origem[coluna - 1][linha - 1], + 1 * origem[coluna][linha - 1], + 1 * origem[coluna + 1][linha - 1],
-                        + 1 * origem[coluna - 1][linha],     + 1 * origem[coluna][linha]    , + 1 * origem[coluna + 1][linha],
-                        + 1 * origem[coluna - 1][linha + 1], + 1 * origem[coluna][linha + 1], + 1 * origem[coluna + 1][linha + 1]
-                };
-                Arrays.sort(valor);
-                matriz[coluna][linha] = valor[8];
+                int vetor[] = {
+                    origem[coluna - 1][linha - 1],
+                    origem[coluna][linha - 1],
+                    origem[coluna + 1][linha - 1],
+                    origem[coluna - 1][linha],
+                    origem[coluna][linha],
+                    origem[coluna + 1][linha],
+                    origem[coluna - 1][linha + 1],
+                    origem[coluna][linha + 1],
+                    origem[coluna + 1][linha + 1]};
+                java.util.Arrays.sort(vetor);
+                matriz[coluna][linha] = vetor[8];
             }
         }
         return matriz;
     }
 
-    // Filtros Passa Alta - detecta contornos
-
-    public int[][] fpaHorizontal(int[][] origem) {
+    // Filtro Passa-Alta 
+    public int[][] fpaSobelHorizontal(int[][] origem) {
         int largura = origem.length;
         int altura = origem[0].length;
         int[][] matriz = new int[largura][altura];
         for (int linha = 1; linha < altura - 1; linha++) {
             for (int coluna = 1; coluna < largura - 1; coluna++) {
-                int valor = (
-                        - 1 * origem[coluna - 1][linha - 1] - 2 * origem[coluna][linha - 1] - 1 * origem[coluna + 1][linha - 1]
-                        + 0 * origem[coluna - 1][linha]     + 0 * origem[coluna][linha]     + 0 * origem[coluna + 1][linha]
-                        + 1 * origem[coluna - 1][linha + 1] + 2 * origem[coluna][linha + 1] + 1 * origem[coluna + 1][linha + 1]
-                );
+                int valor = (- 1 * (origem[coluna - 1][linha - 1]) - 2 * (origem[coluna][linha - 1]) - 1 * (origem[coluna + 1][linha - 1])
+                             + 0 * (origem[coluna - 1][linha])     + 0 * (origem[coluna][linha])     + 0 * (origem[coluna + 1][linha])
+                             + 1 * (origem[coluna - 1][linha + 1]) + 2 * (origem[coluna][linha + 1]) + 1 * (origem[coluna + 1][linha + 1]));
                 matriz[coluna][linha] = limite0To255(Math.abs(valor));
             }
         }
         return matriz;
     }
 
-    public int[][] fpaVertical(int[][] origem) {
+    public int[][] fpaSobelVertical(int[][] origem) {
         int largura = origem.length;
         int altura = origem[0].length;
         int[][] matriz = new int[largura][altura];
         for (int linha = 1; linha < altura - 1; linha++) {
             for (int coluna = 1; coluna < largura - 1; coluna++) {
-                int valor = (
-                        - 1 * origem[coluna - 1][linha - 1] + 0 * origem[coluna][linha - 1] + 1 * origem[coluna + 1][linha - 1]
-                        - 2 * origem[coluna - 1][linha]     + 0 * origem[coluna][linha]     + 2 * origem[coluna + 1][linha]
-                        - 1 * origem[coluna - 1][linha + 1] + 0 * origem[coluna][linha + 1] + 1 * origem[coluna + 1][linha + 1]
-                );
+                int valor = (- 1 * (origem[coluna - 1][linha - 1]) + 0 * (origem[coluna][linha - 1]) + 1 * (origem[coluna + 1][linha - 1])
+                             - 2 * (origem[coluna - 1][linha])     + 0 * (origem[coluna][linha])     + 2 * (origem[coluna + 1][linha])
+                             - 1 * (origem[coluna - 1][linha + 1]) + 0 * (origem[coluna][linha + 1]) + 1 * (origem[coluna + 1][linha + 1]));
                 matriz[coluna][linha] = limite0To255(Math.abs(valor));
             }
         }
@@ -409,33 +429,138 @@ public class Visao {
         int[][] matriz = new int[largura][altura];
         for (int linha = 1; linha < altura - 1; linha++) {
             for (int coluna = 1; coluna < largura - 1; coluna++) {
-                int valorVertical = (
-                        - 1 * origem[coluna - 1][linha - 1] + 0 * origem[coluna][linha - 1] + 1 * origem[coluna + 1][linha - 1]
-                        - 2 * origem[coluna - 1][linha]     + 0 * origem[coluna][linha]     + 2 * origem[coluna + 1][linha]
-                        - 1 * origem[coluna - 1][linha + 1] + 0 * origem[coluna][linha + 1] + 1 * origem[coluna + 1][linha + 1]
-                );
 
-                int valorHorizontal = (
-                        - 1 * origem[coluna - 1][linha - 1] - 2 * origem[coluna][linha - 1] - 1 * origem[coluna + 1][linha - 1]
-                        + 0 * origem[coluna - 1][linha]     + 0 * origem[coluna][linha]     + 0 * origem[coluna + 1][linha]
-                        + 1 * origem[coluna - 1][linha + 1] + 2 * origem[coluna][linha + 1] + 1 * origem[coluna + 1][linha + 1]
-                );
-                matriz[coluna][linha] = limite0To255((int) Math.sqrt(Math.pow(valorVertical, 2) + Math.pow(valorHorizontal, 2)));
+                int vh = (-1 * (origem[coluna - 1][linha - 1]) - 2 * (origem[coluna][linha - 1]) - 1 * (origem[coluna + 1][linha - 1])
+                        + 0 * (origem[coluna - 1][linha]) + 0 * (origem[coluna][linha]) + 0 * (origem[coluna + 1][linha])
+                        + 1 * (origem[coluna - 1][linha + 1]) + 2 * (origem[coluna][linha + 1]) + 1 * (origem[coluna + 1][linha + 1]));
+
+                int vv = (-1 * (origem[coluna - 1][linha - 1]) + 0 * (origem[coluna][linha - 1]) + 1 * (origem[coluna + 1][linha - 1])
+                        - 2 * (origem[coluna - 1][linha]) + 0 * (origem[coluna][linha]) + 2 * (origem[coluna + 1][linha])
+                        - 1 * (origem[coluna - 1][linha + 1]) + 0 * (origem[coluna][linha + 1]) + 1 * (origem[coluna + 1][linha + 1]));
+
+                matriz[coluna][linha] = limite0To255((int) Math.sqrt(Math.pow(vv, 2) + Math.pow(vh, 2)));
             }
         }
         return matriz;
     }
 
+    public int[][] fpaPrewitt(int[][] origem) {
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int[][] matriz = new int[largura][altura];
+        for (int linha = 1; linha < altura - 1; linha++) {
+            for (int coluna = 1; coluna < largura - 1; coluna++) {
 
-    public int limite0To255(int valor){
-        if (valor < 0) {
-            return 0;
-        } else if (valor > 255) {
-            return 255;
-        } else {
-            return valor;
+                int vh = (- 1 * (origem[coluna - 1][linha - 1]) - 1 * (origem[coluna][linha - 1]) - 1 * (origem[coluna + 1][linha - 1])
+                          + 0 * (origem[coluna - 1][linha]) + 0 * (origem[coluna][linha]) + 0 * (origem[coluna + 1][linha])
+                          + 1 * (origem[coluna - 1][linha + 1]) + 1 * (origem[coluna][linha + 1]) + 1 * (origem[coluna + 1][linha + 1]));
+
+                int vv = (-1 * (origem[coluna - 1][linha - 1]) + 0 * (origem[coluna][linha - 1]) + 1 * (origem[coluna + 1][linha - 1])
+                        - 1 * (origem[coluna - 1][linha]) + 0 * (origem[coluna][linha]) + 1 * (origem[coluna + 1][linha])
+                        - 1 * (origem[coluna - 1][linha + 1]) + 0 * (origem[coluna][linha + 1]) + 1 * (origem[coluna + 1][linha + 1]));
+
+                matriz[coluna][linha] = limite0To255((int) Math.sqrt(Math.pow(vv, 2) + Math.pow(vh, 2)));
+            }
         }
+        return matriz;
+    }
+
+    //Histograma
+    public int[] histograma(int[][] matriz) {
+        int largura = matriz.length;
+        int altura = matriz[0].length;
+        int[] vetor = new int[256];
+        for (int linha = 0; linha < altura; linha++) {
+            for (int coluna = 0; coluna < largura; coluna++) {
+                int valor = matriz[coluna][linha];
+                vetor[valor] = 1 + vetor[valor];
+            }
+        }
+        return vetor;
+    }
+
+    public double[] histogramaNormalizado(int[][] matriz) {
+        int largura = matriz.length;
+        int altura = matriz[0].length;
+        double[] vetor = new double[256];
+        for (int linha = 0; linha < altura; linha++) {
+            for (int coluna = 0; coluna < largura; coluna++) {
+                int valor = matriz[coluna][linha];
+                vetor[valor] = 1 + vetor[valor];
+            }
+        }
+        int totalPontos = largura * altura;
+        for (int i = 0; i <= 255; i++) {
+            vetor[i] = vetor[i] / totalPontos;
+        }
+        return vetor;
+    }
+
+    public int[][] histogramaEqualizar(int[][] origem) {
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int[][] matriz = new int[largura][altura];
+        //Monta Histograma
+        double[] histograma = new double[256];
+        for (int linha = 0; linha < altura; linha++) {
+            for (int coluna = 0; coluna < largura; coluna++) {
+                int valor = origem[coluna][linha];
+                histograma[valor] = 1 + histograma[valor];
+            }
+        }
+        //Normaliza Histograma
+        int totalPontos = largura * altura;
+        for (int i = 0; i <= 255; i++) {
+            histograma[i] = histograma[i] / totalPontos;
+        }
+        //Funçao distribuiçao acumulativa
+        for (int i = 1; i <= 255; i++) {
+            histograma[i] = histograma[i] + histograma[i - 1];
+        }
+        //Ajusta o valor acumulado para o nivel de cinza mais próximo
+        for (int i = 0; i <= 255; i++) {
+            histograma[i] = histograma[i] * 255;
+        }
+        //Percorre a matriz equalizando os niveis de cinza
+        for (int linha = 0; linha < altura; linha++) {
+            for (int coluna = 0; coluna < largura; coluna++) {
+                matriz[coluna][linha] = (int) histograma[origem[coluna][linha]];
+            }
+        }
+        return matriz;
+    }
+
+    //Morfologia
+    public int[][] dilatacao(int[][] origem) {
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int[][] matriz = new int[largura][altura];
+        for (int linha = 1; linha < altura - 1; linha++) {
+            for (int coluna = 1; coluna < largura - 1; coluna++) {
+                if (origem[coluna]    [linha] == 255) {
+                    matriz[coluna - 1][linha - 1] = 255;
+                    matriz[coluna]    [linha - 1] = 255;
+                    matriz[coluna + 1][linha - 1] = 255;
+                    matriz[coluna - 1][linha]     = 255;
+                    matriz[coluna]    [linha]     = 255;
+                    matriz[coluna + 1][linha]     = 255;
+                    matriz[coluna - 1][linha + 1] = 255;
+                    matriz[coluna]    [linha + 1] = 255;
+                    matriz[coluna + 1][linha + 1] = 255;
+                }
+            }
+        }
+        return matriz;
+    }
+
+    public int[][] erosao(int[][] origem) {
+        int[][]matriz = negativo(origem);
+        matriz = dilatacao(matriz);
+        matriz = negativo(matriz);
+        return matriz;
     }
 
 
+    
+   
 }

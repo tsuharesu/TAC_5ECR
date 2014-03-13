@@ -20,14 +20,8 @@ public class Aula1 implements IExecutaOperacao {
 
         images.add(visao.matrizToImagem(cinza));
 
-        int[][] fpaHorizontal = visao.fpaHorizontal(cinza);
-        images.add(visao.matrizToImagem(fpaHorizontal));
-
-        int[][] fpaVertical = visao.fpaVertical(cinza);
-        images.add(visao.matrizToImagem(fpaVertical));
-
-        int[][] fpaSobel = visao.fpaSobel(cinza);
-        images.add(visao.matrizToImagem(fpaSobel));
+        int[][] equalizada = visao.histogramaEqualizar(cinza);
+        images.add(visao.matrizToImagem(equalizada));
 
 		return images;
     }
