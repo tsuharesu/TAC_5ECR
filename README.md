@@ -4,6 +4,44 @@ Repositório criado para as aulas de Tópicos Avançados de Computação, 5ECR -
 
 *Eclipse* - criar um novo projeto apontado location para pasta do projeto
 
+## 20140408
+**1. Contagem de regiões**
+
+Imagem tem que estar binarizada (cor -> escala de cinza -> limiar para binarizar). <br/>
+Preciso dar características para conseguir fazer a contagem.
+Criamos um mapa de regiões, percorremos e verificamos se é um ponto branco.
+Usamos vizinhança de 4, igual na erosão para verificar os vizinhos
+
+1. Esq = 0 & Cima = 0? (inicio de uma nova região)
+    1. cont++
+    2. mapa recebe o valor do cont
+    3. incluo no vetor de junções
+2. Esq = 0 & Cima != 0
+    1. mapa recebe o valor superior
+3. Esq != 0 & Cima = 0
+    1. mapa recebe o valor esquerdo
+4. Esq != 0 & Cima != 0 & Esq = Cima
+    1. mapa recebe o valor superior
+5. Esq != 0 & Cima != & Esq != Sup
+    1. mapa recebe o valor superior
+    2. no vetor de junções, o valor superior recebe o novo valor
+
+Na segunda passada, vamos percorrer o vetor de junções para refazer o mapa apontar para o local correto.
+
+Na terceira passada, vamos percorrer todo o mapa de regiões e trocar os valores pelos que estão no vetor de junções.
+
+**2. RGB -> YCbCr**
+Y - Intensidade
+Cb -> Crominancia do Blue
+Cr -> Crominancia do Red
+
+Precisa primeiro passar para Tons de Cinza em Intensidade. Depois pegamos o Cb e o Cr.
+Cb = vai de -127 a 127
+Cr = vai de -127 a 127
+
+Tudo isso vai servir para detectar pele.
+
+
 ## 20140311
 **1. Prewitt**
 

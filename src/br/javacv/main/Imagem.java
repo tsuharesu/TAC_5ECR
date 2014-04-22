@@ -7,13 +7,11 @@ public class Imagem {
 
     public static void main(String[] args) {
 
-    	int[][][] matrizOriginal = new Visao().arquivoMatrizRGB("files/imagem1.jpg");
+        int[][][] matrizOriginal = new Visao().arquivoMatrizRGB("files/rosto1.jpg");
 
         Formulario f = new Formulario();
 
         f.exibir(new Aula1(), matrizOriginal);
-
-
 
 
     }

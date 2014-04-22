@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -305,7 +307,6 @@ public class Visao {
         }
         return matriz;
     }
-
        
     // Filtro Passa-Baixa
     public int[][] fpbMedia3x3(int[][] origem) {
@@ -560,7 +561,323 @@ public class Visao {
         return matriz;
     }
 
+    //Segmentacao
+    public int[][] regioes(int[][] origem) {
+        //Define matriz de regioes
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int[][] matriz = new int[largura][altura];
+        //Inicializa o contador de regioes
+        int quantidade = 0;
+        //Declara e inicializa a lista de junçoes
+        List<Integer> lista = new ArrayList<Integer>();
+        lista.add(quantidade);
+        //Percorre a matriz imagem
+        for (int linha = 1; linha < altura - 1; linha++) {
+            for (int coluna = 1; coluna < largura - 1; coluna++) {
+                //Verifica se o ponto da matriz imagem e 255 
+                if (origem[coluna][linha] == 255) {
+                    //Regra 1 -> esquerdo = 0 e superior = 0
+                    if ((matriz[coluna - 1][linha] == 0) && (matriz[coluna][linha - 1] == 0)) {
+                        quantidade++;
+                        matriz[coluna][linha] = quantidade;
+                        //Adiciona uma junçao
+                        lista.add(quantidade);
+                    }
+                    //Regra 2 -> esquerdo <> 0 e superior = 0
+                    if ((matriz[coluna - 1][linha] != 0) && (matriz[coluna][linha - 1] == 0)) {
+                        matriz[coluna][linha] = matriz[coluna - 1][linha];
+                    }
+                    //Regra 3 -> esquerdo = 0 e superior <> 0
+                    if ((matriz[coluna - 1][linha] == 0) && (matriz[coluna][linha - 1] != 0)) {
+                        matriz[coluna][linha] = matriz[coluna][linha - 1];
+                    }
+                    //Regra 4 -> esquerdo <> 0 e superior <> 0 e esquerdo = superior
+                    if ((matriz[coluna - 1][linha] != 0) && (matriz[coluna][linha - 1] != 0)
+                            && (matriz[coluna - 1][linha] == matriz[coluna][linha - 1])) {
+                        matriz[coluna][linha] = matriz[coluna - 1][linha];
+                    }
+                    //Regra 5 -> esquerdo <> 0 e superior <> 0 e esquerdo <> superior
+                    if ((matriz[coluna - 1][linha] != 0) && (matriz[coluna][linha - 1] != 0)
+                            && (matriz[coluna - 1][linha] != matriz[coluna][linha - 1])) {
+                        matriz[coluna][linha] = matriz[coluna - 1][linha];
+                        //Altera a lista de junções
+                        lista.set(matriz[coluna][linha - 1], matriz[coluna - 1][linha]);
+                    }
+                }
+            }
+        }
+        //Arruma lista de junções
+        for (int i = 1; i < lista.size(); i++) {
+            int aux = lista.get(i);
+            while (aux != lista.get(aux)) {
+                aux = lista.get(aux);
+            }
+            lista.set(i, aux);
+        }
+        //Arruma a matriz de regioes
+        for (int linha = 0; linha < altura; linha++) {
+            for (int coluna = 0; coluna < largura; coluna++) {
+                matriz[coluna][linha] = lista.get(matriz[coluna][linha]);
+            }
+        }
+        //Conta a quantidade real de regiões
+        quantidade = 0;
+        for (int i = 1; i < lista.size(); i++) {
+            if (i == lista.get(i)) {
+                quantidade++;
 
-    
-   
+
+            }
+        }
+        System.out.println(quantidade);
+        //Exibe a lista de junções e a quantidade real de regiões
+        for (int i = 1; i < lista.size(); i++) {
+            System.out.println(i + " - " + lista.get(i));
+        }
+        System.out.println("Regiões = " + quantidade);
+        return matriz;
+    }
+
+    //Modelo de cores
+    public int[][] rgbToY(int[][][] origem) {
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int[][] matriz = new int[largura][altura];
+        for (int linha = 0; linha < altura; linha++) {
+            for (int coluna = 0; coluna < largura; coluna++) {
+                matriz[coluna][linha] = (int) ((origem[coluna][linha][0] * 0.299)
+                        + (origem[coluna][linha][1] * 0.587)
+                        + (origem[coluna][linha][2] * 0.114));
+            }
+        }
+        return matriz;
+
+    }
+
+    public int[][] rgbToCb(int[][][] origem) {
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int[][] matriz = new int[largura][altura];
+        for (int linha = 0; linha < altura; linha++) {
+            for (int coluna = 0; coluna < largura; coluna++) {
+                matriz[coluna][linha] = 127 + (int) ((origem[coluna][linha][0] * -0.169)
+                        + (origem[coluna][linha][1] * -0.331)
+                        + (origem[coluna][linha][2] * 0.500));
+            }
+        }
+        return matriz;
+
+    }
+
+    public int[][] rgbToCr(int[][][] origem) {
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int[][] matriz = new int[largura][altura];
+        for (int linha = 0; linha < altura; linha++) {
+            for (int coluna = 0; coluna < largura; coluna++) {
+                matriz[coluna][linha] = 127 + (int) ((origem[coluna][linha][0] * 0.500)
+                        + (origem[coluna][linha][1] * -0.419)
+                        + (origem[coluna][linha][2] * -0.081));
+            }
+        }
+        return matriz;
+
+    }
+
+    public int[][][] rgbToYCbCr(int[][][] origem) {
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int[][][] matriz = new int[largura][altura][3];
+        for (int linha = 0; linha < altura; linha++) {
+            for (int coluna = 0; coluna < largura; coluna++) {
+                matriz[coluna][linha][0] = (int) ((origem[coluna][linha][0] * 0.299)
+                        + (origem[coluna][linha][1] * 0.587)
+                        + (origem[coluna][linha][2] * 0.114));
+                matriz[coluna][linha][1] = 127 + (int) ((origem[coluna][linha][0] * -0.169)
+                        + (origem[coluna][linha][1] * -0.331)
+                        + (origem[coluna][linha][2] * 0.500));
+                matriz[coluna][linha][2] = 127 + (int) ((origem[coluna][linha][0] * 0.500)
+                        + (origem[coluna][linha][1] * -0.419)
+                        + (origem[coluna][linha][2] * -0.081));
+            }
+        }
+        return matriz;
+
+    }
+
+    //Skin - Detec�ao de Pele
+
+    public int[][][] skinRgb1(int[][][] origem) {
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int[][][] matriz = new int[largura][altura][3];
+        for (int linha = 0; linha < altura; linha++) {
+            for (int coluna = 0; coluna < largura; coluna++) {
+                int r = origem[coluna][linha][0];
+                int g = origem[coluna][linha][1];
+                int b = origem[coluna][linha][2];
+                if ((r > 95) & (g > 40) & (b > 20)) {
+                    matriz[coluna][linha][0] = origem[coluna][linha][0];
+                    matriz[coluna][linha][1] = origem[coluna][linha][1];
+                    matriz[coluna][linha][2] = origem[coluna][linha][2];
+                } else {
+                    matriz[coluna][linha][0] = 255;
+                    matriz[coluna][linha][1] = 0;
+                    matriz[coluna][linha][2] = 0;
+                }
+            }
+        }
+        return matriz;
+    }
+
+    public int[][][] skinRgb2(int[][][] origem) {
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int[][][] matriz = new int[largura][altura][3];
+        for (int linha = 0; linha < altura; linha++) {
+            for (int coluna = 0; coluna < largura; coluna++) {
+                int r = origem[coluna][linha][0];
+                int g = origem[coluna][linha][1];
+                int b = origem[coluna][linha][2];
+                if (Math.max(r, Math.max(g, b)) - Math.min(r, Math.min(g, b)) > 15) {
+                    matriz[coluna][linha][0] = origem[coluna][linha][0];
+                    matriz[coluna][linha][1] = origem[coluna][linha][1];
+                    matriz[coluna][linha][2] = origem[coluna][linha][2];
+                } else {
+                    matriz[coluna][linha][0] = 255;
+                    matriz[coluna][linha][1] = 0;
+                    matriz[coluna][linha][2] = 0;
+                }
+
+            }
+        }
+        return matriz;
+    }
+
+    public int[][][] skinRgb3(int[][][] origem) {
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int[][][] matriz = new int[largura][altura][3];
+        for (int linha = 0; linha < altura; linha++) {
+            for (int coluna = 0; coluna < largura; coluna++) {
+                int r = origem[coluna][linha][0];
+                int g = origem[coluna][linha][1];
+                int b = origem[coluna][linha][2];
+                if ((r - g > 15) & (r > b)) {
+                    matriz[coluna][linha][0] = origem[coluna][linha][0];
+                    matriz[coluna][linha][1] = origem[coluna][linha][1];
+                    matriz[coluna][linha][2] = origem[coluna][linha][2];
+                } else {
+                    matriz[coluna][linha][0] = 255;
+                    matriz[coluna][linha][1] = 0;
+                    matriz[coluna][linha][2] = 0;
+                }
+
+            }
+        }
+        return matriz;
+    }
+
+    public int[][][] skinRgb(int[][][] origem) {
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int[][][] matriz = new int[largura][altura][3];
+        for (int linha = 0; linha < altura; linha++) {
+            for (int coluna = 0; coluna < largura; coluna++) {
+                int r = origem[coluna][linha][0];
+                int g = origem[coluna][linha][1];
+                int b = origem[coluna][linha][2];
+                if ((r > 95) & (g > 40) & (b > 20) &
+                        (Math.max(r, Math.max(g, b)) - Math.min(r, Math.min(g, b)) > 15) &
+                        (r - g > 15) & (r > b)
+                        ) {
+                    matriz[coluna][linha][0] = origem[coluna][linha][0];
+                    matriz[coluna][linha][1] = origem[coluna][linha][1];
+                    matriz[coluna][linha][2] = origem[coluna][linha][2];
+                } else {
+                    matriz[coluna][linha][0] = 255;
+                    matriz[coluna][linha][1] = 255;
+                    matriz[coluna][linha][2] = 0;
+                }
+            }
+        }
+        return matriz;
+    }
+
+    public int[][][] skinYCbCr1(int[][][] origem) {
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int[][][] matriz = new int[largura][altura][3];
+        for (int linha = 0; linha < altura; linha++) {
+            for (int coluna = 0; coluna < largura; coluna++) {
+                int cb = 127 + (int) ((origem[coluna][linha][0] * -0.169)
+                        + (origem[coluna][linha][1] * -0.331)
+                        + (origem[coluna][linha][2] * 0.500));
+                if ((cb > 75) & (cb < 125)) {
+                    matriz[coluna][linha][0] = origem[coluna][linha][0];
+                    matriz[coluna][linha][1] = origem[coluna][linha][1];
+                    matriz[coluna][linha][2] = origem[coluna][linha][2];
+                } else {
+                    matriz[coluna][linha][0] = 255;
+                    matriz[coluna][linha][1] = 0;
+                    matriz[coluna][linha][2] = 255;
+                }
+            }
+        }
+        return matriz;
+
+    }
+
+    public int[][][] skinYCbCr2(int[][][] origem) {
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int[][][] matriz = new int[largura][altura][3];
+        for (int linha = 0; linha < altura; linha++) {
+            for (int coluna = 0; coluna < largura; coluna++) {
+                int cr = 127 + (int) ((origem[coluna][linha][0] * 0.500)
+                        + (origem[coluna][linha][1] * -0.419)
+                        + (origem[coluna][linha][2] * -0.081));
+                if ((cr > 135) & (cr < 175)) {
+                    matriz[coluna][linha][0] = origem[coluna][linha][0];
+                    matriz[coluna][linha][1] = origem[coluna][linha][1];
+                    matriz[coluna][linha][2] = origem[coluna][linha][2];
+                } else {
+                    matriz[coluna][linha][0] = 255;
+                    matriz[coluna][linha][1] = 0;
+                    matriz[coluna][linha][2] = 255;
+                }
+            }
+        }
+        return matriz;
+
+    }
+
+    public int[][][] skinYCbCr(int[][][] origem) {
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int[][][] matriz = new int[largura][altura][3];
+        for (int linha = 0; linha < altura; linha++) {
+            for (int coluna = 0; coluna < largura; coluna++) {
+                int cb = 127 + (int) ((origem[coluna][linha][0] * -0.169)
+                        + (origem[coluna][linha][1] * -0.331)
+                        + (origem[coluna][linha][2] * 0.500));
+                int cr = 127 + (int) ((origem[coluna][linha][0] * 0.500)
+                        + (origem[coluna][linha][1] * -0.419)
+                        + (origem[coluna][linha][2] * -0.081));
+                if ((cb > 75) & (cb < 125) & (cr > 135) & (cr < 175)) {
+                    matriz[coluna][linha][0] = origem[coluna][linha][0];
+                    matriz[coluna][linha][1] = origem[coluna][linha][1];
+                    matriz[coluna][linha][2] = origem[coluna][linha][2];
+                } else {
+                    matriz[coluna][linha][0] = 255;
+                    matriz[coluna][linha][1] = 255;
+                    matriz[coluna][linha][2] = 0;
+                }
+            }
+        }
+        return matriz;
+
+    }
 }
+
