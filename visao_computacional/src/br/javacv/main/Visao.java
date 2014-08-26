@@ -1,8 +1,7 @@
 package br.javacv.main;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,10 +9,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.imageio.ImageIO;
+
 public class Visao {
 
-       
-	// Auxiliar ****************************************************************
+
+    // Auxiliar ****************************************************************
     public int limite0To255(int valor) {
         if (valor < 0) {
             valor = 0;
@@ -22,7 +23,7 @@ public class Visao {
         }
         return valor;
     }
-       
+
     // Arquivo p/ Matriz *******************************************************
     public int[][][] arquivoMatrizRGB(String arquivo) {
         int[][][] matriz;
@@ -307,7 +308,7 @@ public class Visao {
         }
         return matriz;
     }
-       
+
     // Filtro Passa-Baixa
     public int[][] fpbMedia3x3(int[][] origem) {
         int largura = origem.length;
@@ -315,9 +316,9 @@ public class Visao {
         int[][] matriz = new int[largura][altura];
         for (int linha = 1; linha < altura - 1; linha++) {
             for (int coluna = 1; coluna < largura - 1; coluna++) {
-                int valor = (+ 1 * (origem[coluna - 1][linha - 1]) + 1 * (origem[coluna][linha - 1]) + 1 * (origem[coluna + 1][linha - 1])
-                             + 1 * (origem[coluna - 1][linha])     + 1 * (origem[coluna][linha])     + 1 * (origem[coluna + 1][linha])
-                             + 1 * (origem[coluna - 1][linha + 1]) + 1 * (origem[coluna][linha + 1]) + 1 * (origem[coluna + 1][linha + 1])) / 9;
+                int valor = (+1 * (origem[coluna - 1][linha - 1]) + 1 * (origem[coluna][linha - 1]) + 1 * (origem[coluna + 1][linha - 1])
+                        + 1 * (origem[coluna - 1][linha]) + 1 * (origem[coluna][linha]) + 1 * (origem[coluna + 1][linha])
+                        + 1 * (origem[coluna - 1][linha + 1]) + 1 * (origem[coluna][linha + 1]) + 1 * (origem[coluna + 1][linha + 1])) / 9;
                 matriz[coluna][linha] = valor;
             }
         }
@@ -331,22 +332,22 @@ public class Visao {
         for (int linha = 1; linha < altura - 1; linha++) {
             for (int coluna = 1; coluna < largura - 1; coluna++) {
                 int vetor[] = {
-                    origem[coluna - 1][linha - 1],
-                    origem[coluna][linha - 1],
-                    origem[coluna + 1][linha - 1],
-                    origem[coluna - 1][linha],
-                    origem[coluna][linha],
-                    origem[coluna + 1][linha],
-                    origem[coluna - 1][linha + 1],
-                    origem[coluna][linha + 1],
-                    origem[coluna + 1][linha + 1]};
+                        origem[coluna - 1][linha - 1],
+                        origem[coluna][linha - 1],
+                        origem[coluna + 1][linha - 1],
+                        origem[coluna - 1][linha],
+                        origem[coluna][linha],
+                        origem[coluna + 1][linha],
+                        origem[coluna - 1][linha + 1],
+                        origem[coluna][linha + 1],
+                        origem[coluna + 1][linha + 1]};
                 java.util.Arrays.sort(vetor);
                 matriz[coluna][linha] = vetor[4];
             }
         }
         return matriz;
     }
-    
+
     public int[][] fpbMinimo3x3(int[][] origem) {
         int largura = origem.length;
         int altura = origem[0].length;
@@ -354,22 +355,22 @@ public class Visao {
         for (int linha = 1; linha < altura - 1; linha++) {
             for (int coluna = 1; coluna < largura - 1; coluna++) {
                 int vetor[] = {
-                    origem[coluna - 1][linha - 1],
-                    origem[coluna][linha - 1],
-                    origem[coluna + 1][linha - 1],
-                    origem[coluna - 1][linha],
-                    origem[coluna][linha],
-                    origem[coluna + 1][linha],
-                    origem[coluna - 1][linha + 1],
-                    origem[coluna][linha + 1],
-                    origem[coluna + 1][linha + 1]};
+                        origem[coluna - 1][linha - 1],
+                        origem[coluna][linha - 1],
+                        origem[coluna + 1][linha - 1],
+                        origem[coluna - 1][linha],
+                        origem[coluna][linha],
+                        origem[coluna + 1][linha],
+                        origem[coluna - 1][linha + 1],
+                        origem[coluna][linha + 1],
+                        origem[coluna + 1][linha + 1]};
                 java.util.Arrays.sort(vetor);
                 matriz[coluna][linha] = vetor[0];
             }
         }
         return matriz;
     }
-    
+
     public int[][] fpbMaximo3x3(int[][] origem) {
         int largura = origem.length;
         int altura = origem[0].length;
@@ -377,15 +378,15 @@ public class Visao {
         for (int linha = 1; linha < altura - 1; linha++) {
             for (int coluna = 1; coluna < largura - 1; coluna++) {
                 int vetor[] = {
-                    origem[coluna - 1][linha - 1],
-                    origem[coluna][linha - 1],
-                    origem[coluna + 1][linha - 1],
-                    origem[coluna - 1][linha],
-                    origem[coluna][linha],
-                    origem[coluna + 1][linha],
-                    origem[coluna - 1][linha + 1],
-                    origem[coluna][linha + 1],
-                    origem[coluna + 1][linha + 1]};
+                        origem[coluna - 1][linha - 1],
+                        origem[coluna][linha - 1],
+                        origem[coluna + 1][linha - 1],
+                        origem[coluna - 1][linha],
+                        origem[coluna][linha],
+                        origem[coluna + 1][linha],
+                        origem[coluna - 1][linha + 1],
+                        origem[coluna][linha + 1],
+                        origem[coluna + 1][linha + 1]};
                 java.util.Arrays.sort(vetor);
                 matriz[coluna][linha] = vetor[8];
             }
@@ -400,9 +401,9 @@ public class Visao {
         int[][] matriz = new int[largura][altura];
         for (int linha = 1; linha < altura - 1; linha++) {
             for (int coluna = 1; coluna < largura - 1; coluna++) {
-                int valor = (- 1 * (origem[coluna - 1][linha - 1]) - 2 * (origem[coluna][linha - 1]) - 1 * (origem[coluna + 1][linha - 1])
-                             + 0 * (origem[coluna - 1][linha])     + 0 * (origem[coluna][linha])     + 0 * (origem[coluna + 1][linha])
-                             + 1 * (origem[coluna - 1][linha + 1]) + 2 * (origem[coluna][linha + 1]) + 1 * (origem[coluna + 1][linha + 1]));
+                int valor = (-1 * (origem[coluna - 1][linha - 1]) - 2 * (origem[coluna][linha - 1]) - 1 * (origem[coluna + 1][linha - 1])
+                        + 0 * (origem[coluna - 1][linha]) + 0 * (origem[coluna][linha]) + 0 * (origem[coluna + 1][linha])
+                        + 1 * (origem[coluna - 1][linha + 1]) + 2 * (origem[coluna][linha + 1]) + 1 * (origem[coluna + 1][linha + 1]));
                 matriz[coluna][linha] = limite0To255(Math.abs(valor));
             }
         }
@@ -415,9 +416,9 @@ public class Visao {
         int[][] matriz = new int[largura][altura];
         for (int linha = 1; linha < altura - 1; linha++) {
             for (int coluna = 1; coluna < largura - 1; coluna++) {
-                int valor = (- 1 * (origem[coluna - 1][linha - 1]) + 0 * (origem[coluna][linha - 1]) + 1 * (origem[coluna + 1][linha - 1])
-                             - 2 * (origem[coluna - 1][linha])     + 0 * (origem[coluna][linha])     + 2 * (origem[coluna + 1][linha])
-                             - 1 * (origem[coluna - 1][linha + 1]) + 0 * (origem[coluna][linha + 1]) + 1 * (origem[coluna + 1][linha + 1]));
+                int valor = (-1 * (origem[coluna - 1][linha - 1]) + 0 * (origem[coluna][linha - 1]) + 1 * (origem[coluna + 1][linha - 1])
+                        - 2 * (origem[coluna - 1][linha]) + 0 * (origem[coluna][linha]) + 2 * (origem[coluna + 1][linha])
+                        - 1 * (origem[coluna - 1][linha + 1]) + 0 * (origem[coluna][linha + 1]) + 1 * (origem[coluna + 1][linha + 1]));
                 matriz[coluna][linha] = limite0To255(Math.abs(valor));
             }
         }
@@ -452,9 +453,9 @@ public class Visao {
         for (int linha = 1; linha < altura - 1; linha++) {
             for (int coluna = 1; coluna < largura - 1; coluna++) {
 
-                int vh = (- 1 * (origem[coluna - 1][linha - 1]) - 1 * (origem[coluna][linha - 1]) - 1 * (origem[coluna + 1][linha - 1])
-                          + 0 * (origem[coluna - 1][linha]) + 0 * (origem[coluna][linha]) + 0 * (origem[coluna + 1][linha])
-                          + 1 * (origem[coluna - 1][linha + 1]) + 1 * (origem[coluna][linha + 1]) + 1 * (origem[coluna + 1][linha + 1]));
+                int vh = (-1 * (origem[coluna - 1][linha - 1]) - 1 * (origem[coluna][linha - 1]) - 1 * (origem[coluna + 1][linha - 1])
+                        + 0 * (origem[coluna - 1][linha]) + 0 * (origem[coluna][linha]) + 0 * (origem[coluna + 1][linha])
+                        + 1 * (origem[coluna - 1][linha + 1]) + 1 * (origem[coluna][linha + 1]) + 1 * (origem[coluna + 1][linha + 1]));
 
                 int vv = (-1 * (origem[coluna - 1][linha - 1]) + 0 * (origem[coluna][linha - 1]) + 1 * (origem[coluna + 1][linha - 1])
                         - 1 * (origem[coluna - 1][linha]) + 0 * (origem[coluna][linha]) + 1 * (origem[coluna + 1][linha])
@@ -514,11 +515,11 @@ public class Visao {
         for (int i = 0; i <= 255; i++) {
             histograma[i] = histograma[i] / totalPontos;
         }
-        //Funçao distribuiçao acumulativa
+        //FunÃ§ao distribuiÃ§ao acumulativa
         for (int i = 1; i <= 255; i++) {
             histograma[i] = histograma[i] + histograma[i - 1];
         }
-        //Ajusta o valor acumulado para o nivel de cinza mais próximo
+        //Ajusta o valor acumulado para o nivel de cinza mais prÃ³ximo
         for (int i = 0; i <= 255; i++) {
             histograma[i] = histograma[i] * 255;
         }
@@ -538,15 +539,15 @@ public class Visao {
         int[][] matriz = new int[largura][altura];
         for (int linha = 1; linha < altura - 1; linha++) {
             for (int coluna = 1; coluna < largura - 1; coluna++) {
-                if (origem[coluna]    [linha] == 255) {
+                if (origem[coluna][linha] == 255) {
                     matriz[coluna - 1][linha - 1] = 255;
-                    matriz[coluna]    [linha - 1] = 255;
+                    matriz[coluna][linha - 1] = 255;
                     matriz[coluna + 1][linha - 1] = 255;
-                    matriz[coluna - 1][linha]     = 255;
-                    matriz[coluna]    [linha]     = 255;
-                    matriz[coluna + 1][linha]     = 255;
+                    matriz[coluna - 1][linha] = 255;
+                    matriz[coluna][linha] = 255;
+                    matriz[coluna + 1][linha] = 255;
                     matriz[coluna - 1][linha + 1] = 255;
-                    matriz[coluna]    [linha + 1] = 255;
+                    matriz[coluna][linha + 1] = 255;
                     matriz[coluna + 1][linha + 1] = 255;
                 }
             }
@@ -555,21 +556,22 @@ public class Visao {
     }
 
     public int[][] erosao(int[][] origem) {
-        int[][]matriz = negativo(origem);
+        int[][] matriz = negativo(origem);
         matriz = dilatacao(matriz);
         matriz = negativo(matriz);
         return matriz;
     }
 
     //Segmentacao
-    public int[][] regioes(int[][] origem) {
+
+    public int[][] mapaRegioes(int[][] origem) {
         //Define matriz de regioes
         int largura = origem.length;
         int altura = origem[0].length;
         int[][] matriz = new int[largura][altura];
         //Inicializa o contador de regioes
         int quantidade = 0;
-        //Declara e inicializa a lista de junçoes
+        //Declara e inicializa a lista de junÃ§oes
         List<Integer> lista = new ArrayList<Integer>();
         lista.add(quantidade);
         //Percorre a matriz imagem
@@ -581,7 +583,7 @@ public class Visao {
                     if ((matriz[coluna - 1][linha] == 0) && (matriz[coluna][linha - 1] == 0)) {
                         quantidade++;
                         matriz[coluna][linha] = quantidade;
-                        //Adiciona uma junçao
+                        //Adiciona uma junÃ§ao
                         lista.add(quantidade);
                     }
                     //Regra 2 -> esquerdo <> 0 e superior = 0
@@ -601,13 +603,13 @@ public class Visao {
                     if ((matriz[coluna - 1][linha] != 0) && (matriz[coluna][linha - 1] != 0)
                             && (matriz[coluna - 1][linha] != matriz[coluna][linha - 1])) {
                         matriz[coluna][linha] = matriz[coluna - 1][linha];
-                        //Altera a lista de junções
+                        //Altera a lista de junÃ§Ãµes
                         lista.set(matriz[coluna][linha - 1], matriz[coluna - 1][linha]);
                     }
                 }
             }
         }
-        //Arruma lista de junções
+        //Arruma lista de junÃ§Ãµes
         for (int i = 1; i < lista.size(); i++) {
             int aux = lista.get(i);
             while (aux != lista.get(aux)) {
@@ -621,22 +623,76 @@ public class Visao {
                 matriz[coluna][linha] = lista.get(matriz[coluna][linha]);
             }
         }
-        //Conta a quantidade real de regiões
-        quantidade = 0;
-        for (int i = 1; i < lista.size(); i++) {
-            if (i == lista.get(i)) {
-                quantidade++;
+        return matriz;
+    }
 
-
+    public int[][] matrizCaracteristicas(int[][] mapaRegioes) {
+        //Define matriz de regioes
+        int largura = mapaRegioes.length;
+        int altura = mapaRegioes[0].length;
+        int[][] matriz = new int[5][1000];
+        //Percorre a matriz imagem
+        for (int linha = 1; linha < altura - 1; linha++) {
+            for (int coluna = 1; coluna < largura - 1; coluna++) {
+                //Verifica se o ponto da matriz imagem e 255 
+                if (mapaRegioes[coluna][linha] > 0) {
+                    int regiao = mapaRegioes[coluna][linha];
+                    //Primeiro ponto da regiao
+                    if (matriz[4][regiao] == 0) {
+                        matriz[0][regiao] = coluna;
+                        matriz[1][regiao] = coluna;
+                        matriz[2][regiao] = linha;
+                        matriz[3][regiao] = linha;
+                    } else {
+                        //0 - Esquerda
+                        if (matriz[0][regiao] > coluna) {
+                            matriz[0][regiao] = coluna;
+                        } else {
+                            //1 - Direita
+                            if (matriz[1][regiao] < coluna) {
+                                matriz[1][regiao] = coluna;
+                            }
+                        }
+                        //2 - Superior
+                        if (matriz[2][regiao] > linha) {
+                            matriz[2][regiao] = linha;
+                        } else {
+                            //3 - Inferior
+                            if (matriz[3][regiao] < linha) {
+                                matriz[3][regiao] = linha;
+                            }
+                        }
+                    }
+                    //4 - Pontos
+                    matriz[4][regiao] = matriz[4][regiao] + 1;
+                }
             }
         }
-        System.out.println(quantidade);
-        //Exibe a lista de junções e a quantidade real de regiões
-        for (int i = 1; i < lista.size(); i++) {
-            System.out.println(i + " - " + lista.get(i));
-        }
-        System.out.println("Regiões = " + quantidade);
         return matriz;
+    }
+
+    public void exibirCaracteristicas(int[][] matrizCaracteristicas) {
+        for (int i = 0; i < 1000; i++) {
+            if (matrizCaracteristicas[4][i] > 0) {
+                int larg = 1 + matrizCaracteristicas[1][i] - matrizCaracteristicas[0][i];
+                int alt = 1 + matrizCaracteristicas[3][i] - matrizCaracteristicas[2][i];
+                System.out.println(i +
+                        "\t -> Colunas " + matrizCaracteristicas[0][i] + "-" + matrizCaracteristicas[1][i] +
+                        "\t Linhas " + matrizCaracteristicas[2][i] + "-" + matrizCaracteristicas[3][i] +
+                        "\t Pontos " + matrizCaracteristicas[4][i] + " " +
+                        "\t Dimensao " + larg + "x" + alt);
+            }
+        }
+    }
+
+    public int quantidadeRegioes(int[][] matrizCaracteristicas) {
+        int quantidade = 0;
+        for (int i = 0; i < 1000; i++) {
+            if (matrizCaracteristicas[4][i] > 0) {
+                quantidade++;
+            }
+        }
+        return quantidade;
     }
 
     //Modelo de cores
@@ -706,7 +762,7 @@ public class Visao {
 
     }
 
-    //Skin - Detec�ao de Pele
+    //Skin - Detecçao de Pele
 
     public int[][][] skinRgb1(int[][][] origem) {
         int largura = origem.length;
@@ -878,6 +934,76 @@ public class Visao {
         }
         return matriz;
 
+    }
+
+    public int tonalidadeMedia(int[][] origem) {
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int[] vetor = new int[256];
+        for (int linha = 0; linha < altura; linha++) {
+            for (int coluna = 0; coluna < largura; coluna++) {
+                int valor = origem[coluna][linha];
+                vetor[valor] = 1 + vetor[valor];
+            }
+        }
+        int total = 0;
+        for (int i = 0; i <= 255; i++) {
+            total = total + (i * vetor[i]);
+        }
+        total = total / (largura * altura);
+        return total;
+    }
+
+    public int[][] tonalidadeMediaQuadrante(int[][] origem, int quadrante) {
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int larguraQ = largura / quadrante + 1;
+        int alturaQ = altura / quadrante + 1;
+        int[][] matriz = new int[larguraQ][alturaQ];
+        for (int linha = 0; linha < altura; linha++) {
+            for (int coluna = 0; coluna < largura; coluna++) {
+                int colunaQ = coluna / quadrante;
+                int linhaQ = linha / quadrante;
+                matriz[colunaQ][linhaQ] = matriz[colunaQ][linhaQ] + origem[coluna][linha];
+            }
+        }
+        int pontos = quadrante * quadrante;
+        for (int linha = 0; linha < alturaQ; linha++) {
+            for (int coluna = 0; coluna < larguraQ; coluna++) {
+                matriz[coluna][linha] = matriz[coluna][linha] / pontos;
+            }
+        }
+        return matriz;
+    }
+
+    public int[] projecaoHorizontal(int[][] origem) {
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int[] vetor = new int[altura];
+
+        for (int linha = 0; linha < altura; linha++) {
+            for (int coluna = 0; coluna < largura; coluna++) {
+                if (origem[coluna][linha] == 255)
+                    vetor[linha] += 1;
+            }
+        }
+
+        return vetor;
+    }
+
+    public int[] projecaoVertical(int[][] origem) {
+        int largura = origem.length;
+        int altura = origem[0].length;
+        int[] vetor = new int[largura];
+
+        for (int coluna = 0; coluna < largura; coluna++) {
+            for (int linha = 0; linha < altura; linha++) {
+                if (origem[coluna][linha] == 255)
+                    vetor[coluna] += 1;
+            }
+        }
+
+        return vetor;
     }
 }
 

@@ -4,6 +4,17 @@ Repositório criado para as aulas de Tópicos Avançados de Computação, 5ECR -
 
 *Eclipse* - criar um novo projeto apontado location para pasta do projeto
 
+##
+
+Projeçao horizontal
+retorna um vetor de linhas, altura
+
+Projeção vertical
+retorna um vetor de colunas, largura
+
+if(origem[coluna][linha] == 255)
+    resposta[coluna]++
+
 ## 20140408
 **1. Contagem de regiões**
 
